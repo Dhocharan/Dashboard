@@ -1,0 +1,105 @@
+/* Clients Page Styling */
+.clients-container {
+  max-width: 80%;
+  margin: auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Title Styling */
+.clients-container h2 {
+  text-align: center;
+  color: #333;
+}
+
+/* Form Styling */
+.client-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.client-form input,
+.client-form select {
+  padding: 10px;
+  width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  background-color:black;
+}
+
+.client-form button {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.client-form button:hover {
+  background-color: #0056b3;
+}
+
+/* Table Styling */
+.clients-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.clients-table th,
+.clients-table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+  font-size: 14px;
+}
+
+.clients-table th {
+  background-color: #007bff;
+  color: white;
+}
+
+.clients-table td {
+  background-color: white;
+  color: #333;
+}
+
+/* Actions Buttons */
+.clients-table button {
+  padding: 6px 10px;
+  margin: 0 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.clients-table button:first-child {
+  background-color: #ffc107;
+  color: black;
+}
+
+.clients-table button:last-child {
+  background-color: #dc3545;
+  color: white;
+}
+
+.clients-table button:hover {
+  opacity: 0.8;
+}
+
+/* No Data Message */
+.no-data {
+  text-align: center;
+  color: red;
+  font-size: 16px;
+  font-weight: bold;
+}
