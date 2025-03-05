@@ -1,25 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Outlet, Link, useLocation } from "react-router-dom";
+import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { AiOutlineHome } from "react-icons/ai";
+import { AiOutlineHome, AiOutlineMenu } from "react-icons/ai";
 import { FiUsers } from "react-icons/fi";
 import { MdOutlineEventNote } from "react-icons/md";
-import { FaProjectDiagram } from "react-icons/fa"; // Updated icon
+import { FaProjectDiagram } from "react-icons/fa";
 import { RiMoneyDollarCircleLine } from "react-icons/ri";
+import { IoLogOutOutline } from "react-icons/io5";
 import "./Dashboard.css";
 
 const Layout = () => {
-  const location = useLocation(); // Get current route
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [summary, setSummary] = useState({ clients: 0, tasks: 0, projects: 0, invoices: 0 });
 
-  // State to store summary data
-  const [summary, setSummary] = useState({
-    clients: 0,
-    tasks: 0,
-    projects: 0,
-    invoices: 0,
-  });
-
-  // Fetch summary data when on home page
   useEffect(() => {
     if (location.pathname === "/") {
       axios
@@ -29,37 +24,50 @@ const Layout = () => {
     }
   }, [location.pathname]);
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
   return (
     <div className="dashboard-container">
       {/* Sidebar */}
-      <div className="sidebar">
-        <h2 id="das">Dashboard</h2>
+      <div className={`sidebar ${sidebarOpen ? "open" : "closed"}`}>
+        <div className="sidebar-header">
+          <h2 id="das">Dashboard</h2>
+          
+        </div>
         <nav>
           <ul>
-            <li>
+            <li className={location.pathname === "/" ? "active" : ""}>
               <Link to="/">
                 <AiOutlineHome /> Home
               </Link>
             </li>
-            <li>
+            <li className={location.pathname.includes("client-management") ? "active" : ""}>
               <Link to="/client-management">
-                <FiUsers /> Client Management
+                <FiUsers /> Clients
               </Link>
             </li>
-            <li>
+            <li className={location.pathname.includes("task-management") ? "active" : ""}>
               <Link to="/task-management">
-                <MdOutlineEventNote /> Task & Meeting Management
+                <MdOutlineEventNote /> Tasks & Meetings
               </Link>
             </li>
-            <li>
+            <li className={location.pathname.includes("project-management") ? "active" : ""}>
               <Link to="/project-management">
-                <FaProjectDiagram /> Project Management
+                <FaProjectDiagram /> Projects
+              </Link>
+            </li>
+            <li className={location.pathname.includes("invoice-management") ? "active" : ""}>
+              <Link to="/invoice-management">
+                <RiMoneyDollarCircleLine /> Invoices & Finance
               </Link>
             </li>
             <li>
-              <Link to="/invoice-management">
-                <RiMoneyDollarCircleLine /> Invoice & Finance Management
-              </Link>
+              <button onClick={handleLogout} className="logout-btn">
+                <IoLogOutOutline /> Logout
+              </button>
             </li>
           </ul>
         </nav>
@@ -67,32 +75,19 @@ const Layout = () => {
 
       {/* Main Content */}
       <div className="main-content">
-        {/* Show dynamic Summary only on Home page */}
         {location.pathname === "/" && (
           <>
             <h1>Summary</h1>
             <div className="summary-grid">
-              <div className="summary-card">
-                <h3>Clients</h3>
-                <p>{summary.clients} Active Clients</p>
-              </div>
-              <div className="summary-card">
-                <h3>Tasks & Meetings</h3>
-                <p>{summary.tasks} Pending Tasks</p>
-              </div>
-              <div className="summary-card">
-                <h3>Projects</h3>
-                <p>{summary.projects} Ongoing Projects</p>
-              </div>
-              <div className="summary-card">
-                <h3>Invoices & Finance</h3>
-                <p>{summary.invoices} Invoices Generated</p>
-              </div>
+              {Object.keys(summary).map((key) => (
+                <div className="summary-card" key={key}>
+                  <h3>{key.charAt(0).toUpperCase() + key.slice(1)}</h3>
+                  <p>{summary[key]} {key === "clients" ? "Active Clients" : key === "tasks" ? "Pending Tasks" : key === "projects" ? "Ongoing Projects" : "Invoices Generated"}</p>
+                </div>
+              ))}
             </div>
           </>
         )}
-
-        {/* Dynamic Content */}
         <div className="dynamic-content">
           <Outlet />
         </div>

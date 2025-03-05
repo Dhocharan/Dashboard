@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import "./Clients.css"; // Import styling
+import "./Clients.css";
 
 const Clients = () => {
   const clientTypes = ["Enterprise", "Small Business", "Law Firm", "Startup", "Healthcare"];
@@ -19,19 +19,16 @@ const Clients = () => {
 
   const [editClient, setEditClient] = useState(null);
 
-  // Fetch clients from the database
   useEffect(() => {
     axios.get("http://localhost:5000/api/clients")
       .then(response => setClients(response.data))
       .catch(error => console.error("Error fetching clients:", error));
   }, []);
 
-  // Handle input changes
   const handleChange = (e) => {
     setNewClient({ ...newClient, [e.target.name]: e.target.value });
   };
 
-  // Add new client
   const addClient = () => {
     if (!newClient.name || !newClient.type || !newClient.source || !newClient.priority || !newClient.status) {
       alert("Please fill all fields!");
@@ -46,13 +43,11 @@ const Clients = () => {
       .catch(error => console.error("Error adding client:", error));
   };
 
-  // Set client for editing
   const startEditing = (client) => {
     setEditClient(client);
     setNewClient(client);
   };
 
-  // Update client
   const updateClient = () => {
     axios.put(`http://localhost:5000/api/clients/${editClient._id}`, newClient)
       .then(response => {
@@ -63,7 +58,6 @@ const Clients = () => {
       .catch(error => console.error("Error updating client:", error));
   };
 
-  // Delete client
   const deleteClient = (id) => {
     axios.delete(`http://localhost:5000/api/clients/${id}`)
       .then(() => {
@@ -101,9 +95,9 @@ const Clients = () => {
         </select>
 
         {editClient ? (
-          <button onClick={updateClient}>Update Client</button>
+          <button className="update-btn" onClick={updateClient}>Update Client</button>
         ) : (
-          <button onClick={addClient}>Add Client</button>
+          <button className="add-btn" onClick={addClient}>Add Client</button>
         )}
       </div>
 
@@ -129,8 +123,8 @@ const Clients = () => {
                 <td>{client.priority}</td>
                 <td>{client.status}</td>
                 <td>
-                  <button onClick={() => startEditing(client)}>Edit</button>
-                  <button onClick={() => deleteClient(client._id)}>Delete</button>
+                  <button className="edit-btn" onClick={() => startEditing(client)}>Edit</button>
+                  <button className="delete-btn" onClick={() => deleteClient(client._id)}>Delete</button>
                 </td>
               </tr>
             ))
